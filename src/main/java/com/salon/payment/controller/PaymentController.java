@@ -35,7 +35,15 @@ public class PaymentController {
         PaymentResponse response = paymentService.getPaymentByBookingId(bookingId);
         return ResponseEntity.ok(response);
     }
+    @GetMapping("/test")
+    public ResponseEntity<Map<String, String>> testEndpoint() {
+        Map<String, String> response = new HashMap<>();
+        response.put("message", "Payment Controller is working!");
+        response.put("status", "SUCCESS");
+        return ResponseEntity.ok(response);
+    }
 
+    
     @GetMapping("/{id}")
     public ResponseEntity<PaymentResponse> getPaymentById(@PathVariable String id) {
         log.info("Fetching payment with ID: {}", id);
