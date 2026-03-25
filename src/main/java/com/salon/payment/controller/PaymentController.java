@@ -11,11 +11,15 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
 @RequestMapping("/api/payments")
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = {
+        "http://localhost:3000",
+        "http://ctse-alb-320060941.eu-north-1.elb.amazonaws.com"
+})
 @RequiredArgsConstructor
 @Slf4j
 public class PaymentController {
@@ -33,6 +37,24 @@ public class PaymentController {
     public ResponseEntity<PaymentResponse> getPaymentByBookingId(@PathVariable String bookingId) {
         log.info("Fetching payment for booking: {}", bookingId);
         PaymentResponse response = paymentService.getPaymentByBookingId(bookingId);
+        return ResponseEntity.ok(response);
+    }
+    @GetMapping("/all")
+    public ResponseEntity<List<PaymentResponse>> getAllPayments() {
+        log.info("Fetching all payments");
+        List<PaymentResponse> responses = paymentService.getAllPayments();
+        return ResponseEntity.ok(responses);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Map<String, String>> deletePayment(@PathVariable String id) {
+        log.info("Deleting payment with ID: {}", id);
+        paymentService.deletePayment(id);
+
+        Map<String, String> response = new HashMap<>();
+        response.put("message", "Payment deleted successfully");
+        response.put("paymentId", id);
+
         return ResponseEntity.ok(response);
     }
     @GetMapping("/test")

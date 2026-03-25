@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -230,5 +231,20 @@ public class PaymentService {
         response.setMessage(message);
 
         return response;
+    }
+
+    public List<PaymentResponse> getAllPayments() {
+        return paymentRepository.findAll()
+                .stream()
+                .map(this::mapToResponse)
+                .toList();
+    }
+
+    public void deletePayment(String id) {
+        Payment payment = paymentRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Payment not found with ID: " + id));
+
+        paymentRepository.delete(payment);
+        log.info("Payment deleted successfully with ID: {}", id);
     }
 }

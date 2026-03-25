@@ -69,7 +69,7 @@ public class WebhookController {
                 bookingId = getText(customData, "booking_id");
             }
 
-            // Get data node
+            // Get data node.
             JsonNode data = root.path("data");
             JsonNode attributes = data.path("attributes");
 
