@@ -15,4 +15,7 @@ public class PaymentResponse {
     private String transactionId;
     private LocalDateTime createdAt;
     private String lemonSqueezyOrderId;
+    private String customerName;
+    private String customerEmail;
+    private String currency;
 }

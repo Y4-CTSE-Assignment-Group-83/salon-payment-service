@@ -2,6 +2,7 @@ package com.salon.payment.controller;
 
 import com.salon.payment.dto.CreatePaymentRequest;
 import com.salon.payment.dto.PaymentResponse;
+import com.salon.payment.dto.UpdatePaymentRequest;
 import com.salon.payment.service.PaymentService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -55,6 +56,15 @@ public class PaymentController {
         response.put("message", "Payment deleted successfully");
         response.put("paymentId", id);
 
+        return ResponseEntity.ok(response);
+    }
+    @PutMapping("/{id}")
+    public ResponseEntity<PaymentResponse> updatePayment(
+            @PathVariable String id,
+            @Valid @RequestBody UpdatePaymentRequest request
+    ) {
+        log.info("Updating payment with ID: {}", id);
+        PaymentResponse response = paymentService.updatePayment(id, request);
         return ResponseEntity.ok(response);
     }
     @GetMapping("/test")

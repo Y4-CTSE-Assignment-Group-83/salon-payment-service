@@ -3,9 +3,11 @@ package com.salon.payment.service;
 import com.salon.payment.dto.CreatePaymentRequest;
 import com.salon.payment.dto.PaymentResponse;
 import com.salon.payment.dto.BookingUpdateRequest;
+import com.salon.payment.dto.UpdatePaymentRequest;
 import com.salon.payment.model.Payment;
 import com.salon.payment.model.PaymentStatus;
 import com.salon.payment.repository.PaymentRepository;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -207,6 +209,10 @@ public class PaymentService {
         response.setCreatedAt(payment.getCreatedAt());
         response.setCheckoutUrl(payment.getCheckoutUrl());
         response.setLemonSqueezyOrderId(payment.getLemonSqueezyOrderId());
+        response.setCustomerName(payment.getCustomerName());
+        response.setCustomerEmail(payment.getCustomerEmail());
+        response.setCurrency(payment.getCurrency());
+
 
         String message;
         switch (payment.getStatus()) {
@@ -246,5 +252,20 @@ public class PaymentService {
 
         paymentRepository.delete(payment);
         log.info("Payment deleted successfully with ID: {}", id);
+    }
+
+    public PaymentResponse updatePayment(String id, UpdatePaymentRequest request) {
+        Payment payment = paymentRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Payment not found with id: " + id));
+
+        payment.setCustomerName(request.getCustomerName());
+        payment.setCustomerEmail(request.getCustomerEmail());
+        payment.setAmount(request.getAmount());
+        payment.setCurrency(request.getCurrency());
+        payment.setStatus(request.getStatus());
+        payment.setUpdatedAt(java.time.LocalDateTime.now());
+
+        Payment updatedPayment = paymentRepository.save(payment);
+        return mapToResponse(updatedPayment);
     }
 }

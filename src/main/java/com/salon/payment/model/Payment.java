@@ -27,5 +27,7 @@ public class Payment {
     private LocalDateTime paidAt;
     private String failureReason;
     private String transactionId;
+
+
 }
 
